@@ -56,7 +56,8 @@ if (promptFight === "fight" || promptFight === "FIGHT") {
     if (confirmSkip) {
       window.alert(playerName + " has decided to skip this fight. Goodbye!");
       // subtract money from playerMoney for skipping
-      playerMoney = playerMoney - 2;
+      playerMoney = playerMoney - 10;
+      console.log("playerMoney", playerMoney);
     }
     // if no (false), ask question again by running fight() again
     else {
