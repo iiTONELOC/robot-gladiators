@@ -19,7 +19,10 @@ var startGame = function() {
       // set health for picked enemy
       pickedEnemyObj.health = randomNumber(40, 60);
 
-      console.log(pickedEnemyObj);
+
+
+      console.log( pickedEnemyObj);
+      
 
       // pass the pickedEnemyObj object variable's value into the fight function, where it will assume the value of the enemy parameter
       fight(pickedEnemyObj);
@@ -58,33 +61,41 @@ var endGame = function() {
 var fightOrSkip = function() {
   // ask player if they'd like to fight or skip using fightOrSkip function
   var promptFight = window.prompt('Would you like FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
+  
 
   // Conditional Recursive Function Call
 if (promptFight === "" || promptFight === null) {
   window.alert("You need to provide a valid answer! Please try again.");
   return fightOrSkip();
 }
-
+  promptFight = promptFight.toLowerCase();
   // if player picks "skip" confirm and then stop the loop
-  if (promptFight === "skip" || promptFight === "SKIP") {
+  if (promptFight === "skip") {
     // confirm player wants to skip
     var confirmSkip = window.confirm("Are you sure you'd like to quit?");
 
     // if yes (true), leave fight
     if (confirmSkip) {
       window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
-      // subtract money from playerMoney for skipping
-      playerInfo.playerMoney = playerInfo.money - 10;
+      // subtract money from playerMoney for skipping, but don't let them go into the negative
+      playerInfo.money = Math.max(0, playerInfo.money - 10);
       shop();
+
+      // return true if player wants to leave
+      return true;
     }
   }
+  
 }
 
 // fight function (now with parameter for enemy's object holding name, health, and attack values)
 var fight = function(enemy) {
   while (playerInfo.health > 0 && enemy.health > 0) {
-    fightOrSkip();
-
+    // ask player if they'd like to fight or skip using fightOrSkip function
+    if (fightOrSkip()) {
+      // if true, leave fight by breaking loop
+      break;
+    }
     var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
 
     // remove enemy's health by subtracting the amount we set in the damage variable
